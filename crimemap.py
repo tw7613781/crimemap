@@ -3,6 +3,8 @@ from dbhelper import DBHelper
 from flask import Flask
 from flask import render_template
 from flask import request
+from flask import redirect
+from flask import url_for
 import json
 
 app = Flask(__name__)
@@ -16,7 +18,6 @@ def home():
     except Exception as e:
         print e
         crimes = None
-    print crimes
     return render_template('home.html', crimes=crimes)
 
 @app.route('/add', methods = ['POST'])
@@ -45,7 +46,7 @@ def submitcrime():
     longitude = float(request.form.get('longitude'))
     description = request.form.get('description')
     DB.add_crime(category, date, latitude, longitude, description)
-    return home()
+    return redirect(url_for('home'))
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True)
